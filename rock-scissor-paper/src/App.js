@@ -1,10 +1,12 @@
-// import HandIcon from "./HandIcon";
-import HandButton from './HandButton'
+import Button from './Button';
+import HandButton from './HandButton';
 
 function App() {
     const handleClick = (value) => console.log(value);
+    const handleClearClick = () => console.log('처음부터');
     return (
         <div>
+            <Button onClick={handleClearClick}>처음부터</Button>
             <HandButton value="rock" onClick={handleClick} />
             <HandButton value="scissor" onClick={handleClick} />
             <HandButton value="paper" onClick={handleClick} />
