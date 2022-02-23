@@ -1,22 +1,22 @@
-// import { Fragment } from 'react';
 import ReactDOM from 'react-dom';
+import App from './App'
 
-const product = 'MacBook';
-const model = 'Air';
-const item = `${product} ${model}`;
-const imageUrl = 
-  'https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/macbook-air-space-gray-config-201810?wid=1078&hei=624&fmt=jpeg&qlt=80&.v=1633033424000';
+// const element = <h1>안녕 리액트!</h1>
+//console.log(element);
 
-function handleClick() {
-  alert('곧 도착합니다!');
-}
+// function Hello() {
+//   return <h1>안녕 리액트</h1>
+// }
+
+// const element = (
+//   <>
+//     <Hello />
+//     <Hello />
+//     <Hello />
+//   </>
+// );
 
 ReactDOM.render(
-  // <h1>나만의 { product.toUpperCase() + model } 주문하기</h1>,
-  <>
-    <h1>나만의 { item } 주문하기</h1>
-    <img src={ imageUrl } alt="제품 사진" />
-    <button onClick={ handleClick }>확인</button>
-  </>,
+  <App />,
   document.getElementById('root')
 );
