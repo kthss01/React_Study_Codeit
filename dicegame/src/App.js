@@ -7,45 +7,30 @@ function random(n) {
 }
 
 function App() {
-    const [ num, setNum ] = useState(1);
-    const [ sum, setSum ] = useState(0);
-    const [ gameHistory, setGameHistory ] = useState([]);
-
-    const [ otherNum, setOtherNum ] = useState(1);
-    const [ otherSum, setOtherSum ] = useState(0);
-    const [ otherGameHistory, setOtherGameHistory ] = useState([]);
+    const [ myHistory, setMyHistory ] = useState([]);
+    const [ otherHistory, setOtherHistory ] = useState([]);
 
     const handleRollClick = () => {
-        const nextNum = random(6);
-        setNum(nextNum);
-        setSum(sum + nextNum);
-        setGameHistory([...gameHistory, nextNum]);
-        
+        const nextMyNum = random(6);
         const nextOtherNum = random(6);
-        setOtherNum(nextOtherNum);
-        setOtherSum(otherSum + nextOtherNum);
-        setOtherGameHistory([...otherGameHistory, nextOtherNum]);
+        setMyHistory([...myHistory, nextMyNum]);        
+        setOtherHistory([...otherHistory, nextOtherNum]);
     };
 
     const handleClearClick = () => {
-        setNum(1);
-        setSum(0);
-        setGameHistory([]);
-
-        setOtherNum(1);
-        setOtherSum(0);
-        setOtherGameHistory([]);
+        setMyHistory([]);
+        setOtherHistory([]);
     };
 
     return (
         <div>
             <div>
-                <Button onClick={handleRollClick}>던지기</Button>
-                <Button onClick={handleClearClick}>처음부터</Button>
+                <Button color="blue" onClick={handleRollClick}>던지기</Button>
+                <Button color="red" onClick={handleClearClick}>처음부터</Button>
             </div>
             <div>
-                <Board name="나" color="blue" num={num} sum={sum} gameHistory={gameHistory} />
-                <Board name="상대" color="red" num={otherNum} sum={otherSum} gameHistory={otherGameHistory} />
+                <Board name="나" color="blue" gameHistory={myHistory} />
+                <Board name="상대" color="red" gameHistory={otherHistory} />
             </div>
         </div>
     );
