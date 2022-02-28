@@ -1,8 +1,8 @@
 import Dice from './Dice'
 import "./Board.css";
 
-function Board({ className = '', name, color, gameHistory }) {
-    const classNames = `Board ${className}`;
+function Board({ className = '', name, color, gameHistory, winner }) {
+    const classNames = `Board ${className} ${winner ? 'Board-winner' : ''}`;
     const num = gameHistory[gameHistory.length - 1] || 1;
     const sum = gameHistory.reduce((a, b) => a + b, 0);
     return (
