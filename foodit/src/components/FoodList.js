@@ -1,28 +1,38 @@
-function FoodListItem({ item }) {
-	const { imgUrl, title, calorie, content } = item;
+import "./FoodList.css";
 
-	return (
-		<div>
-			<img src={imgUrl} alt={title} />
-			<div>{title}</div>
-			<div>{calorie}</div>
-			<div>{content}</div>
-		</div>
-	);
+function formatDate(value) {
+    const date = new Date(value);
+    return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}`;
 }
 
-function FoodList({ items }) {
-	return (
-		<ul>
-			{items.map((item) => {
-				return (
-					<li>
-						<FoodListItem item={item} />
-					</li>
-				);
-			})}
-		</ul>
-	);
+function FoodListItem({ item, onDelete }) {
+    const { imgUrl, title, calorie, content, createdAt } = item;
+    const handleDeleteClick = () => onDelete(item.id);
+
+    return (
+        <div>
+            <img src={imgUrl} alt={title} />
+            <div>{title}</div>
+            <div>{calorie}</div>
+            <div>{content}</div>
+            <div>{formatDate(createdAt)}</div>
+            <button onClick={handleDeleteClick}>삭제</button>
+        </div>
+    );
+}
+
+function FoodList({ items, onDelete }) {
+    return (
+        <ul>
+            {items.map((item) => {
+                return (
+                    <li>
+                        <FoodListItem item={item} onDelete={onDelete} />
+                    </li>
+                );
+            })}
+        </ul>
+    );
 }
 
 export default FoodList;
