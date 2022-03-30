@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useEffect, useRef } from "react";
 
-function FileInput({ name, value, onChange }) {
+function FileInput({ name, value, initialPreivew, onChange }) {
     // const [value, setValue] = useState("");
 
-    const [preview, setPreview] = useState();
+    const [preview, setPreview] = useState(initialPreivew);
 
     const inputRef = useRef();
 
@@ -28,10 +28,10 @@ function FileInput({ name, value, onChange }) {
         setPreview(nextPreview);
 
         return () => {
-            setPreview();
+            setPreview(initialPreivew);
             URL.revokeObjectURL(nextPreview);
         };
-    }, [value]);
+    }, [value, initialPreivew]);
 
     const hanldeClearClick = () => {
         const inputNode = inputRef.current;
