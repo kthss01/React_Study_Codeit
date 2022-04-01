@@ -15,7 +15,7 @@ export async function getReviews({
     return body;
 }
 
-export async function createReviews(formData) {
+export async function createReview(formData) {
     // throw new Error("버그가 아니라 기능합니다");
     const response = await fetch(`${BASE_URL}/film-reviews`, {
         method: "POST",
@@ -23,6 +23,19 @@ export async function createReviews(formData) {
     });
     if (!response.ok) {
         throw new Error("리뷰를 생성하는데 실패했습니다.");
+    }
+    const body = await response.json();
+    return body;
+}
+
+export async function updateReview(id, formData) {
+    // throw new Error("버그가 아니라 기능합니다");
+    const response = await fetch(`${BASE_URL}/film-reviews/${id}`, {
+        method: "PUT",
+        body: formData,
+    });
+    if (!response.ok) {
+        throw new Error("리뷰를 수정하는데 실패했습니다.");
     }
     const body = await response.json();
     return body;

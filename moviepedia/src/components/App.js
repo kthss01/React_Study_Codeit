@@ -1,7 +1,7 @@
 import ReviewList from "./ReviewList";
 // import mockItems from "../mock.json";
 import { useEffect, useState } from "react";
-import { getReviews } from "../api";
+import { createReview, getReviews, updateReview } from "../api";
 import ReviewForm from "./ReviewForm";
 
 const LIMIT = 6;
@@ -56,8 +56,21 @@ function App() {
     //     setItems(reviews);
     // };
 
-    const handleSubmitSuccess = (review) => {
+    const handleCreateSuccess = (review) => {
         setItems((prevItems) => [...prevItems, review]);
+    };
+
+    const handleUpdateSuccess = (review) => {
+        setItems((prevItems) => {
+            const splitIdx = prevItems.findIndex(
+                (item) => item.id === review.id
+            );
+            return [
+                ...prevItems.slice(0, splitIdx),
+                review,
+                ...prevItems.slice(splitIdx + 1),
+            ];
+        });
     };
 
     useEffect(() => {
@@ -70,8 +83,16 @@ function App() {
                 <button onClick={handleNewestClick}>최신순</button>
                 <button onClick={handleBestClick}>베스트순</button>
             </div>
-            <ReviewForm onSubmitSuccess={handleSubmitSuccess} />
-            <ReviewList items={sortedItems} onDelete={handleDelete} />
+            <ReviewForm
+                onSubmit={createReview}
+                onSubmitSuccess={handleCreateSuccess}
+            />
+            <ReviewList
+                items={sortedItems}
+                onDelete={handleDelete}
+                onUpdate={updateReview}
+                onUpdateSuccess={handleUpdateSuccess}
+            />
             {/* <button onClick={handleLoadClick}>불러오기</button> */}
             {hasNext && (
                 <button disabled={isLoading} onClick={handleLoadMore}>
