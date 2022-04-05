@@ -1,5 +1,6 @@
 import { useState } from "react";
 import FileInput from "./FileInput";
+import useAsync from "./hooks/useAsync";
 import RatingInput from "./RatingInput";
 import "./ReviewForm.css";
 
@@ -21,8 +22,9 @@ function ReviewForm({
     // const [rating, setRating] = useState(0);
     // const [content, setContent] = useState("");
     const [values, setValues] = useState(initialValues);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submittingError, setSubmittingError] = useState(null);
+    // const [isSubmitting, setIsSubmitting] = useState(false);
+    // const [submittingError, setSubmittingError] = useState(null);
+    const [isSubmitting, submittingError, onSubmitAsync] = useAsync(onSubmit);
 
     // const handleTitleChange = (e) => {
     //     setTitle(e.target.value);
@@ -66,16 +68,20 @@ function ReviewForm({
         formData.append("imgFile", values.imgFile);
 
         //console.log(values);
-        let result;
-        try {
-            setSubmittingError(null);
-            setIsSubmitting(true);
-            result = await onSubmit(formData);
-        } catch (error) {
-            setSubmittingError(error);
+        // let result;
+        // try {
+        //     setSubmittingError(null);
+        //     setIsSubmitting(true);
+        //     result = await onSubmit(formData);
+        // } catch (error) {
+        //     setSubmittingError(error);
+        //     return;
+        // } finally {
+        //     setIsSubmitting(false);
+        // }
+        const result = await onSubmitAsync(formData);
+        if (!result) {
             return;
-        } finally {
-            setIsSubmitting(false);
         }
 
         const { review } = result;
