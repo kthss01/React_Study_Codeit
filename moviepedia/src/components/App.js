@@ -1,6 +1,6 @@
 import ReviewList from "./ReviewList";
 // import mockItems from "../mock.json";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createReview, deleteReview, getReviews, updateReview } from "../api";
 import ReviewForm from "./ReviewForm";
 import useAsync from "./hooks/useAsync";
@@ -30,7 +30,7 @@ function App() {
 
         setItems((prevItems) => prevItems.filter((item) => item.id !== id));
     };
-    const handleLoad = async (options) => {
+    const handleLoad = useCallback(async (options) => {
         // let result;
         // try {
         //     setIsLoading(true);
@@ -56,7 +56,7 @@ function App() {
         }
         setOffset(options.offset + reviews.length);
         setHasNext(paging.hasNext);
-    };
+    }, [getReviewAsync]);
     const handleLoadMore = () => {
         handleLoad({ order, offset, limit: LIMIT });
     };
@@ -87,7 +87,7 @@ function App() {
 
     useEffect(() => {
         handleLoad({ order, offset: 0, limit: LIMIT });
-    }, [order]);
+    }, [order, handleLoad]);
 
     return (
         <div>
