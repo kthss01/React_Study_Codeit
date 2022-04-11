@@ -3,7 +3,7 @@ import ReviewList from "./ReviewList";
 import { useCallback, useEffect, useState } from "react";
 import { createReview, deleteReview, getReviews, updateReview } from "../api";
 import ReviewForm from "./ReviewForm";
-import useAsync from "./hooks/useAsync";
+import useAsync from "../hooks/useAsync";
 import LocaleContext, { LocaleProvider } from "../contexts/LocaleContext";
 import LocaleSelect from "./LocaleSelect";
 
