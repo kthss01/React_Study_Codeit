@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useTranslate from "../hooks/useTranslate";
 import FileInput from "./FileInput";
 
 const INITIAL_VALUES = {
@@ -25,6 +26,7 @@ function FoodForm({
     onSubmit,
     onCancel,
 }) {
+    const t = useTranslate();
     const [values, setValues] = useState(initialValues);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submittingError, setSubmittingError] = useState(null);
@@ -93,11 +95,11 @@ function FoodForm({
                 onChange={handleInputChange}
             />
             <button type="submit" disabled={isSubmitting}>
-                확인
+                {t("confirm button")}
             </button>
             {onCancel && (
                 <button type="button" onClick={onCancel}>
-                    취소
+                    {t("cancel button")}
                 </button>
             )}
             {submittingError?.message && <div>{submittingError.message}</div>}

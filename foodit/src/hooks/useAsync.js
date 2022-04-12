@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 function useAsync(asyncFunction) {
     const [pending, setPending] = useState(false);
-    cont[(error, setError)] = useState(null);
+    const [error, setError] = useState(null);
 
     const wrappedFunction = useCallback(
         async (...args) => {

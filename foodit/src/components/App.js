@@ -1,15 +1,16 @@
 import FoodList from "./FoodList";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createFood, deleteFood, getFoods, updateFood } from "../api";
 import FoodForm from "./FoodForm";
-import LocaleContext from "../context/LocaleContext";
+import useAsync from "../hooks/useAsync";
+import { LocaleProvider } from "../context/LocaleContext";
+import LocaleSelect from "./LocaleSelect";
 
 function App() {
     const [order, setOrder] = useState("createdAt");
     const [cursor, setCursor] = useState(null);
     const [items, setItems] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [loadingError, setLoadingError] = useState(null);
+    const [isLoading, loadingError, getFoodAsync] = useAsync(getFoods);
     const [search, setSearch] = useState("");
 
     const handleNewestClick = () => setOrder("createdAt");
@@ -21,29 +22,27 @@ function App() {
 
         setItems((prevItems) => prevItems.filter((item) => item.id !== id));
     };
-    const handleLoad = async (options) => {
-        let result;
-        try {
-            setIsLoading(true);
-            setLoadingError(null);
-            result = await getFoods(options);
-        } catch (error) {
-            setLoadingError(error);
-            return;
-        } finally {
-            setIsLoading(false);
-        }
-        const {
-            foods,
-            paging: { nextCursor },
-        } = result;
-        if (!options.nextCursor) {
-            setItems(foods);
-        } else {
-            setItems((prevItems) => [...prevItems, ...foods]);
-        }
-        setCursor(nextCursor);
-    };
+    const handleLoad = useCallback(
+        async (options) => {
+            const result = await getFoodAsync(options);
+
+            if (!result) {
+                return;
+            }
+
+            const {
+                foods,
+                paging: { nextCursor },
+            } = result;
+            if (!options.nextCursor) {
+                setItems(foods);
+            } else {
+                setItems((prevItems) => [...prevItems, ...foods]);
+            }
+            setCursor(nextCursor);
+        },
+        [getFoodAsync]
+    );
     const handleLoadMore = () => {
         handleLoad({ order, cursor, search });
     };
@@ -72,11 +71,12 @@ function App() {
 
     useEffect(() => {
         handleLoad({ order, search });
-    }, [order, search]);
+    }, [order, search, handleLoad]);
 
     return (
-        <LocaleContext.Provider value={"ko"}>
+        <LocaleProvider defaultValue={"ko"}>
             <div>
+                <LocaleSelect />
                 <button onClick={handleNewestClick}>최신순</button>
                 <button onClick={handleCalorieClick}>칼로리순</button>
                 <form onSubmit={handleSearchSubmit}>
@@ -100,7 +100,7 @@ function App() {
                 )}
                 {loadingError?.message && <span>{loadingError.message}</span>}
             </div>
-        </LocaleContext.Provider>
+        </LocaleProvider>
     );
 }
 
