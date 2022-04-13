@@ -5,7 +5,6 @@ export async function getReviews({
     offset = 0,
     limit = 6,
 }) {
-    // throw new Error("버그가 아니라 기능합니다");
     const query = `?order=${order}&offset=${offset}&limit=${limit}`;
     const response = await fetch(`${BASE_URL}/film-reviews` + query);
     if (!response.ok) {
@@ -16,7 +15,6 @@ export async function getReviews({
 }
 
 export async function createReview(formData) {
-    // throw new Error("버그가 아니라 기능합니다");
     const response = await fetch(`${BASE_URL}/film-reviews`, {
         method: "POST",
         body: formData,
@@ -29,7 +27,6 @@ export async function createReview(formData) {
 }
 
 export async function updateReview(id, formData) {
-    // throw new Error("버그가 아니라 기능합니다");
     const response = await fetch(`${BASE_URL}/film-reviews/${id}`, {
         method: "PUT",
         body: formData,
@@ -42,7 +39,6 @@ export async function updateReview(id, formData) {
 }
 
 export async function deleteReview(id) {
-    // throw new Error("버그가 아니라 기능합니다");
     const response = await fetch(`${BASE_URL}/film-reviews/${id}`, {
         method: "DELETE",
     });
