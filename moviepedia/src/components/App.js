@@ -28,7 +28,7 @@ function App() {
     const [order, setOrder] = useState("createdAt");
     const [offset, setOffset] = useState(0);
     const [hasNext, setHasNext] = useState(false);
-    const [isLoading, loadingError, getReviewAsync] = useAsync(getReviews);
+    const [isLoading, loadingError, getReviewsAsync] = useAsync(getReviews);
     const [items, setItems] = useState([]);
     const sortedItems = items.sort((a, b) => b[order] - a[order]);
 
@@ -38,38 +38,34 @@ function App() {
 
     const handleDelete = async (id) => {
         const result = await deleteReview(id);
-        if (!result) {
-            return;
-        }
+        if (!result) return;
 
         setItems((prevItems) => prevItems.filter((item) => item.id !== id));
     };
 
     const handleLoad = useCallback(
         async (options) => {
-            const result = await getReviewAsync(options);
-            if (!result) {
-                return;
-            }
+            const result = await getReviewsAsync(options);
+            if (!result) return;
 
-            const { reviews, paging } = result;
+            const { paging, reviews } = result;
             if (options.offset === 0) {
                 setItems(reviews);
             } else {
                 setItems((prevItems) => [...prevItems, ...reviews]);
             }
-            setOffset(options.offset + reviews.length);
+            setOffset(options.offset + options.limit);
             setHasNext(paging.hasNext);
         },
-        [getReviewAsync]
+        [getReviewsAsync]
     );
 
-    const handleLoadMore = () => {
-        handleLoad({ order, offset, limit: LIMIT });
+    const handleLoadMore = async () => {
+        await handleLoad({ order, offset, limit: LIMIT });
     };
 
     const handleCreateSuccess = (review) => {
-        setItems((prevItems) => [...prevItems, review]);
+        setItems((prevItems) => [review, ...prevItems]);
     };
 
     const handleUpdateSuccess = (review) => {
@@ -93,7 +89,11 @@ function App() {
         <div className="App">
             <nav className="App-nav">
                 <div className="App-nav-container">
-                    <img className="App-logo" src={logoImg} alt="MOVIE PEDIA" />
+                    <img
+                        className="App-logo"
+                        src={logoImg}
+                        alt="MOVIDE PEDIA"
+                    />
                     <LocaleSelect />
                 </div>
             </nav>
@@ -101,7 +101,7 @@ function App() {
                 <div
                     className="App-ReviewForm"
                     style={{
-                        backgroudnImage: `url("${ticketImg}")`,
+                        backgroundImage: `url("${ticketImg}")`,
                     }}
                 >
                     <ReviewForm
@@ -111,10 +111,10 @@ function App() {
                 </div>
                 <div className="App-sorts">
                     <AppSortButton
-                        selected={order == "createdAt"}
+                        selected={order === "createdAt"}
                         onClick={handleNewestClick}
                     >
-                        {t("newset")}
+                        {t("newest")}
                     </AppSortButton>
                     <AppSortButton
                         selected={order === "rating"}
@@ -145,12 +145,12 @@ function App() {
                         <span>{loadingError.message}</span>
                     )}
                 </div>
-                <footer className="App-footer">
-                    <div className="App-footer-container">
-                        {t("terms ofr service")} | {t("privacy policy")}
-                    </div>
-                </footer>
             </div>
+            <footer className="App-footer">
+                <div className="App-footer-container">
+                    {t("terms of service")} | {t("privacy policy")}
+                </div>
+            </footer>
         </div>
     );
 }
