@@ -23,8 +23,8 @@ const INITIAL_VALUES = {
 function FoodForm({
     initialValues = INITIAL_VALUES,
     initialPreview,
-    onSubmitSuccess,
     onSubmit,
+    onSubmitSuccess,
     onCancel,
 }) {
     const t = useTranslate();
@@ -34,13 +34,11 @@ function FoodForm({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const formData = new FormData();
         formData.append("imgFile", values.imgFile);
         formData.append("title", values.title);
         formData.append("calorie", values.calorie);
         formData.append("content", values.content);
-
         let result;
         try {
             setSubmittingError(null);
@@ -52,10 +50,9 @@ function FoodForm({
         } finally {
             setIsSubmitting(false);
         }
-
         const { food } = result;
+        setValues(initialValues);
         onSubmitSuccess(food);
-        setValues(INITIAL_VALUES);
     };
 
     const handleChange = (name, value) => {
@@ -102,7 +99,7 @@ function FoodForm({
                             type="button"
                             onClick={onCancel}
                         >
-                            {t("cancel button")}
+                            취소
                         </button>
                     )}
                     <button
@@ -110,19 +107,18 @@ function FoodForm({
                         type="submit"
                         disabled={isSubmitting}
                     >
-                        {t("confirm button")}
+                        확인
                     </button>
-                    <textarea
-                        className="FoodForm-content"
-                        name="content"
-                        value={values.content}
-                        placeholder={t("content placeholder")}
-                        onChange={handleInputChange}
-                    />
                 </div>
+                <textarea
+                    className="FoodForm-content"
+                    name="content"
+                    value={values.content}
+                    placeholder="내용을 작성해 주세요."
+                    onChange={handleInputChange}
+                />
+                {submittingError && <p>{submittingError.message}</p>}
             </div>
-
-            {submittingError?.message && <p>{submittingError.message}</p>}
         </form>
     );
 }
