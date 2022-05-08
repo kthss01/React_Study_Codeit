@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { useParams } from "react-router-dom";
 import { getQuestionById } from "../api";
 import Avatar from "../components/Avatar";
 import Card from "../components/Card";
@@ -9,7 +10,8 @@ import Warn from "../components/Warn";
 import styles from "./QuestionPage.module.css";
 
 function QuestionPage() {
-    const question = getQuestionById("616825");
+    const { questionSlug } = useParams();
+    const question = getQuestionById(questionSlug);
 
     return (
         <>
